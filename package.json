@@ -1,0 +1,21 @@
+{
+  "name": "18-forkify",
+  "version": "1.0.0",
+  "description": "Forkify Web App",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wongel-Yilma/Forkify-App.git"
+  },
+  "author": "wongel-yilma",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.7.0",
+    "parcel": "^2.0.0-beta.1",
+    "sass": "^1.26.10"
+  }
+}
