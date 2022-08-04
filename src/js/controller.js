@@ -1,11 +1,11 @@
 // import icons from '../img/icons.svg'; // For parcel 1
 import icons from 'url:../img/icons.svg'; // For parcel 2
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 // console.log(icons);
 const recipeContainer = document.querySelector('.recipe');
-const container = document.querySelector('.container');
 
-console.log(container);
 const timeout = function (s) {
   return new Promise(function (_, reject) {
     setTimeout(function () {
@@ -24,21 +24,18 @@ const renderSpinner = function (parentEl) {
             <use href="${icons}#icon-loader"></use>
           </svg>
         </div> `;
-  // parentEl.innerHTML = '';
-  console.log(parentEl);
+  parentEl.innerHTML = '';
   parentEl.insertAdjacentHTML('afterbegin', markup);
-  console.log(parentEl);
-  console.log('Trying to load spinner');
 };
 
 const showRecipe = async function () {
   try {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
     // 1. Load Recipe
-    console.log(recipeContainer);
     renderSpinner(recipeContainer);
     const res = await fetch(
-      `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886`
-      // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc90b`
+      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
     );
     const data = await res.json();
     console.log(res, data);
@@ -62,7 +59,7 @@ const showRecipe = async function () {
       recipe.title
     }" class="recipe__img" />
           <h1 class="recipe__title">
-            <span>Pasta with tomato cream sauce</span>
+            <span>${recipe.title}</span>
           </h1>
         </figure>
 
@@ -163,3 +160,5 @@ const showRecipe = async function () {
 };
 
 showRecipe();
+
+['hashchange', 'load'].forEach(e => window.addEventListener(e, showRecipe));
