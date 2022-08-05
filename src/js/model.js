@@ -4,13 +4,13 @@ import { getJSON } from './helpers.js';
 export const state = {
   recipe: {},
   search: { query: '', results: [], resultsPerPage: RES_PER_PAGE, page: 1 },
+  bookmarks: [],
 };
 
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}${id}`);
     let { recipe } = data.data;
-    console.log(recipe);
     state.recipe = {
       id: recipe.id,
       title: recipe.title,
@@ -21,7 +21,7 @@ export const loadRecipe = async function (id) {
       cookingTime: recipe.cooking_time,
       ingredients: recipe.ingredients,
     };
-    console.log(state.recipe);
+    state.search.page = 1;
   } catch (err) {
     throw err;
   }
@@ -63,4 +63,12 @@ export const updateServings = function (change) {
     ing.quantity *= factor;
   });
   state.recipe.servings = newServings;
+};
+
+export const addBookmark = function (recipe) {
+  // Add bookmark
+  state.bookmarks.push(recipe);
+
+  // Mark the current recipe as bookmark
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
 };
