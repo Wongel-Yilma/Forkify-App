@@ -10,7 +10,6 @@ class SearchView extends View {
   addHandlerSearch(handler) {
     this._parentElement.addEventListener('submit', function (e) {
       e.preventDefault();
-      console.log('Im handling it');
       handler();
     });
   }

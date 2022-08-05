@@ -34,12 +34,12 @@ class RecipeView extends View {
               <use href="${icons}#icon-users"></use>
             </svg>
             <span class="recipe__info-data recipe__info-data--people">${
-              this._data.serving
+              this._data.servings
             }</span>
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--decrease-servings">
                 <svg>
                   <use href="${icons}#icon-minus-circle"></use>
                 </svg>
@@ -104,6 +104,22 @@ class RecipeView extends View {
                 ${ing.description}
               </div>
             </li>`;
+  }
+  addHandlerUpdateServings(handler) {
+    let change;
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--tiny');
+      if (!btn) return;
+      if (btn.classList.contains('btn--decrease-servings')) {
+        change = -1;
+        console.log('Decrese');
+      }
+      if (btn.classList.contains('btn--increase-servings')) {
+        change = 1;
+        console.log('Increse');
+      }
+      handler(change);
+    });
   }
 }
 
