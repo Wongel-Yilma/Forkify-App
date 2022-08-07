@@ -9,7 +9,6 @@ class RecipeView extends View {
     'We could not find the requested recipe. Please try another one.';
 
   _generateMarkup() {
-    console.log(this._data.bookmarked);
     return ` 
     <figure class="recipe__fig">
           <img src="${this._data.image}" alt="${
@@ -115,11 +114,9 @@ class RecipeView extends View {
       if (!btn) return;
       if (btn.classList.contains('btn--decrease-servings')) {
         change = -1;
-        console.log('Decrese');
       }
       if (btn.classList.contains('btn--increase-servings')) {
         change = 1;
-        console.log('Increse');
       }
       handler(change);
     });

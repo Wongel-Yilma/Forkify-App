@@ -22,6 +22,9 @@ export const loadRecipe = async function (id) {
       ingredients: recipe.ingredients,
     };
     state.search.page = 1;
+    if (state.bookmarks.some(bookmark => bookmark.id === id))
+      state.recipe.bookmarked = true;
+    else state.recipe.bookmarked = false;
   } catch (err) {
     throw err;
   }
@@ -55,7 +58,6 @@ export const getSearchResultsPage = function (page = state.search.page) {
 
 export const updateServings = function (change) {
   const newServings = state.recipe.servings + change * SERVING_STEP;
-  console.log(state.recipe.servings);
   if (newServings === 0) return;
   //new q = old q *(new serving/ old serving)
   const factor = newServings / state.recipe.servings;
@@ -65,10 +67,49 @@ export const updateServings = function (change) {
   state.recipe.servings = newServings;
 };
 
+const persistBookmarks = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
 export const addBookmark = function (recipe) {
   // Add bookmark
   state.bookmarks.push(recipe);
 
-  // Mark the current recipe as bookmark
+  // Mark the current recipe as bookmarked
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+  persistBookmarks();
+};
+
+export const removeBookmark = function (recipe) {
+  const index = state.bookmarks.findIndex(
+    bookmark => bookmark.id === recipe.id
+  );
+  state.bookmarks.splice(index, 1);
+  // Mark the current recipe as NOT bookmarked
+
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = false;
+  persistBookmarks();
+};
+
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+
+  if (!storage) return;
+
+  state.bookmarks = JSON.parse(storage);
+};
+
+init();
+
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};
+
+// clearBookmarks();
+
+export const uploadRecipe = async function (newRecipe) {
+  console.log(Object.entries(newRecipe));
+  const ingredients = Object.entries(newRecipe).filter(entry =>
+    entry[0].startsWith('ingredient' && entry[1] !== '')
+  );
+  console.log(ingredients);
 };
